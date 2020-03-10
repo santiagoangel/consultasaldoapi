@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camelContext id="context1" xmlns="http://camel.apache.org/schema/spring">
+        <onException>
+            <exception>java.lang.Exception</exception>
+            <handled>
+                <constant>true</constant>
+            </handled>
+            <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                <constant>500</constant>
+            </setHeader>
+            <setBody>
+                <simple>${exception.message}</simple>
+            </setBody>
+        </onException>
+        <restConfiguration apiContextPath="/openapi.json"
+            bindingMode="json" component="servlet"/>
+        <rest enableCORS="true" id="rest1" path="/">
+            <get id="openapi.json" produces="application/json" uri="openapi.json">
+                <description>Gets the openapi document for this service</description>
+                <route id="rest1-route1">
+                    <setHeader headerName="Exchange.CONTENT_TYPE" id="setHeader-route1">
+                        <constant>application/vnd.oai.openapi+json</constant>
+                    </setHeader>
+                    <setBody id="setBody-route1">
+                        <simple>resource:classpath:openapi.json</simple>
+                    </setBody>
+                </route>
+            </get>
+        </rest>
+        <rest bindingMode="json" enableCORS="true" id="rest2" path="/">
+            <get consumes="text/html" id="consultaSaldoGET" produces="application/json" uri="/consultaSaldo">
+                <description>Consulta de saldo con API. Red Hat TELCEL
+    GET</description>
+                <param dataType="string" description="codigoCuenta"
+                    name="codigoCuenta" required="false" type="query"/>
+                <param dataType="string" description="msisdn"
+                    name="msisdn" required="false" type="query"/>
+                <to uri="direct:consultaSaldoGET"/>
+            </get>
+            <post consumes="application/json" id="consultaSaldoPOST"
+                produces="application/json" uri="/consultaSaldo">
+                <description>Consulta de saldo con API. Red Hat TELCEL
+    POST</description>
+                <param name="Body" required="true" type="body"/>
+                <to uri="direct:consultaSaldoPOST"/>
+            </post>
+        </rest>
+        <route id="route-8bf0f1d5-acf7-45b8-a0de-29402e0a69d3">
+            <from id="from-c05bc679-2b82-44dc-8b9b-28e25eea6ba5" uri="direct:consultaSaldoGET"/>
+            <setHeader headerName="Exchange.CONTENT_TYPE" id="setHeader-get">
+                <constant>application/json</constant>
+            </setHeader>
+            <setBody id="setBody-get">
+                <simple>resource:classpath:output.json</simple>
+            </setBody>
+        </route>
+        <route id="route-163073a4-2e0d-4736-b5ff-0f1c34e76414">
+            <from id="from-6ece425d-16a3-47d9-8a4a-ba67a5e7f7a7" uri="direct:consultaSaldoPOST"/>
+            <setHeader headerName="Exchange.CONTENT_TYPE" id="setHeader-post">
+                <constant>application/json</constant>
+            </setHeader>
+            <setBody id="setBody-post">
+                <simple>resource:classpath:output.json</simple>
+            </setBody>
+        </route>
+        <route id="route2">
+            <from id="from-route2" uri="direct:501"/>
+            <log id="log-route2" message="API operation not yet implemented: ${headers.CamelHttpMethod} ${headers.CamelHttpPath}"/>
+            <setHeader headerName="Exchange.HTTP_RESPONSE_CODE" id="setHeader-route2">
+                <constant>501</constant>
+            </setHeader>
+            <setBody id="setBody-route2">
+                <simple>API operation not implemented: ${headers.CamelHttpMethod} ${headers.CamelHttpPath}</simple>
+            </setBody>
+        </route>
+    </camelContext>
+</beans>

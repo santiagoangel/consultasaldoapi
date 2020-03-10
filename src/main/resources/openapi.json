@@ -1,0 +1,173 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "consultaSaldoAPI",
+        "contact": {
+            "name": "Red Hat",
+            "url": "http://www.redhat.com",
+            "email": "contact@redhat.com"
+        },
+        "version": "1.0"
+    },
+    "host": "0.0.0.",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/consultaSaldo": {
+            "get": {
+                "summary": "consultaSaldo",
+                "description": "Consulta de saldo con API. Red Hat TELCEL\nGET",
+                "operationId": "consultaSaldoGET",
+                "consumes": [
+                    "text/html"
+                ],
+                "parameters": [
+                    {
+                        "name": "codigoCuenta",
+                        "in": "query",
+                        "description": "codigoCuenta",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "msisdn",
+                        "in": "query",
+                        "description": "msisdn",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Saldo de respuesta tipo JSON",
+                        "schema": {
+                            "$ref": "#/definitions/respuesta"
+                        },
+                        "examples": {
+                            "application/json": "{\n    \"codigo\": \"acct13952032569\",\n    \"saldoActual\": \"300\",\n    \"saldoEstimado\": \"300\",\n    \"saldoPenalizaciones\": \"300\",\n    \"saldoMes\": \"300\",\n    \"saldo30Dias\": \"300\",\n    \"saldo60Dias\": \"600\",\n    \"saldo90Dias\": \"900\",\n    \"saldo120Dias\": \"1200\"\n}"
+                        }
+                    },
+                    "500": {
+                        "description": "Error in retrieving response",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "application/json": "{\n    \"error\": 500,\n    \"message\": \"Error in retrieving response\"\n}"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "consultaSaldo"
+                ],
+                "summary": "consultaSaldo",
+                "description": "Consulta de saldo con API. Red Hat TELCEL\nPOST",
+                "operationId": "consultaSaldoPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/consulta"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Saldo de respuesta tipo JSON",
+                        "schema": {
+                            "$ref": "#/definitions/respuesta"
+                        },
+                        "examples": {
+                            "application/json": "{\n    \"codigo\": \"acct13952032569\",\n    \"saldoActual\": \"300\",\n    \"saldoEstimado\": \"300\",\n    \"saldoPenalizaciones\": \"300\",\n    \"saldoMes\": \"300\",\n    \"saldo30Dias\": \"300\",\n    \"saldo60Dias\": \"600\",\n    \"saldo90Dias\": \"900\",\n    \"saldo120Dias\": \"1200\"\n}"
+                        }
+                    },
+                    "500": {
+                        "description": "Error in retrieving response",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "application/json": "{\n    \"error\": 500,\n    \"message\": \"Error in retrieving response\"\n}"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        }
+    },
+    "definitions": {
+        "consulta": {
+            "title": "Root Type for consulta",
+            "description": "consulta de saldo",
+            "type": "object",
+            "properties": {
+                "codigoCuenta": {
+                    "type": "string"
+                },
+                "msisdn": {
+                    "type": "string"
+                }
+            },
+            "example": "{\n    \"codigoCuenta\": \"acct13952032569\",\n    \"msisdn\": \"5512345678\"\n}"
+        },
+        "respuesta": {
+            "title": "Root Type for respuesta",
+            "description": "respuesta a consulta de saldo",
+            "type": "object",
+            "properties": {
+                "codigo": {
+                    "type": "string"
+                },
+                "saldoActual": {
+                    "type": "string"
+                },
+                "saldoEstimado": {
+                    "type": "string"
+                },
+                "saldoPenalizaciones": {
+                    "type": "string"
+                },
+                "saldoMes": {
+                    "type": "string"
+                },
+                "saldo30Dias": {
+                    "type": "string"
+                },
+                "saldo60Dias": {
+                    "type": "string"
+                },
+                "saldo90Dias": {
+                    "type": "string"
+                },
+                "saldo120Dias": {
+                    "type": "string"
+                }
+            },
+            "example": "{\n    \"codigo\": \"acct13952032569\",\n    \"saldoActual\": \"300\",\n    \"saldoEstimado\": \"300\",\n    \"saldoPenalizaciones\": \"300\",\n    \"saldoMes\": \"300\",\n    \"saldo30Dias\": \"300\",\n    \"saldo60Dias\": \"600\",\n    \"saldo90Dias\": \"900\",\n    \"saldo120Dias\": \"1200\"\n}"
+        }
+    },
+    "tags": [
+        {
+            "name": "consultaSaldoHttpBinding",
+            "description": ""
+        }
+    ]
+}
